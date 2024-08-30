@@ -1,0 +1,59 @@
+Piloting:
+    Actions:
+        Movement
+    Direct:
+        Current ship coordinates.
+        Speed.
+        Degrees to turn to face goal position.
+
+    Indirect:
+        Fuel levels (Engineer).
+        Objects (Systems)
+
+Guns:
+    Actions:
+        Target
+        Fire
+    Direct:
+        Weapon status and cooldowns.
+    Indirect:
+        Object codes (Systems)
+
+Systems:
+    Actions:
+        Distribute power
+    Direct:
+        Object codes
+        Power distribution
+    Indirect:
+
+Engineering:
+    Actions:
+        Repair (needs calculations)
+    Direct:
+        
+    Indirect:
+        Ship section Health (Pilot)
+
+Shield:
+    Actions:
+        Reboot
+    Direct:
+        Shield health
+    Indirect:
+
+FTL
+    Actions:
+        Calculate
+        Jump
+        // if the calculations are incorrect then you will die. TODO: Land off course
+
+// Add later
+
+Communications
+
+Commands:
+    Universal:
+        quit
+        menu
+        goto
