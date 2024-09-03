@@ -1,9 +1,11 @@
 import math
 import numpy as np
+import pygame
 
 from storage import Storage, RotationObject
 from simulation import Simulation
 from utility import Utility
+from ui import Renderer
 
 class MenuArea:
     def __init__(self, type:str, content = None, offsetX:int = 0, offsetY:int = 0) -> None:
@@ -61,16 +63,22 @@ class MenuApi:
     def currentMenu() -> Menu:
         return MenuApi.menus[MenuApi.index(Storage.activeMenu)]
 
-    def update():
+    def displayMenu(screen: pygame.surface):
+        pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
         menu:Menu = MenuApi.currentMenu()
         
         match Storage.activeMenu:
             case "Index":
-                return
+                MenuApi.displayMenuOld(screen)
             case "Piloting":
                 relativeGoal = Utility.mapToRelative(Storage.shipObject.position, Storage.Ship.goal)
                 relativeVelocity = Utility.mapToRelative(Storage.shipObject.position, Storage.shipObject.velocity + Storage.shipObject.position.Base)
-                
+                pitch = np.arctan(relativeGoal[1] / relativeGoal[2])
+                yaw = np.arctan(relativeGoal[0] / relativeGoal[2])
+                if relativeGoal[2] < 0:
+                    Renderer.displayGoalDirectionIndicator(screen, (200, 200), 100, 10, pitch, -yaw, True)
+                else:
+                    Renderer.displayGoalDirectionIndicator(screen, (200, 200), 100, 10, -pitch, yaw)
                 """pitch = np.arctan2(relativeGoal[2], np.sqrt(relativeGoal[0]**2 + relativeGoal[1]**2))
                 yaw = np.arctan2(relativeGoal[1], relativeGoal[0])"""
 
@@ -88,3 +96,64 @@ class MenuApi:
                                         "   Z: " + str(round(relativeGoal[2], 2)),
                                         "   Distance: " + str(round(np.linalg.norm(relativeGoal), 2))
                                       ]
+            case "Guns":
+                pass
+            case "Systems":
+                Renderer.displayRadar(screen, (800, 500), 400)
+            case "Engineering":
+                pass
+            case "Shield":
+                pass
+            case "FTL":
+                # Minigame
+                pygame.draw.rect(screen, (0,0,0), (75, 75, 500, 500))
+                pygame.draw.rect(screen, (255,255,255), (75, 75, 500, 500), 2)
+
+                #Button
+                font = pygame.font.SysFont('VT323', 30)
+                if (pygame.mouse.get_pos()[0] > 225 and pygame.mouse.get_pos()[0] < 425) and (pygame.mouse.get_pos()[1] > 600 and pygame.mouse.get_pos()[1] < 700): 
+                    pygame.draw.rect(screen, (25,0,0), (225, 600, 200, 100))
+                    text = font.render("Lock", False, (150, 150, 150))
+                    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
+                else:
+                    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                    pygame.draw.rect(screen, (50,0,0), (225, 600, 200, 100))
+                    text = font.render("Lock", False, (255, 255, 255))
+
+                screen.blit(text, (300, 640))
+
+                pygame.draw.rect(screen, (255,255,255), (225, 600, 200, 100), 2)
+
+                # Map
+                pygame.draw.rect(screen, (0,0,0), (725, 75, 300, 650))
+                pygame.draw.rect(screen, (255,255,255), (725, 75, 300, 650), 2)
+            case _:
+                pass
+
+    def __displayMenuArea(screen:pygame.Surface, menu:Menu, area:MenuArea, x:int, y:int):
+        font = pygame.font.SysFont('VT323', 30)
+        if (area.type == "list"):
+            for i in range(len(area.content)):
+                #print(area.content)
+                text = font.render(area.content[i], False, (255, 255, 255))
+                screen.blit(text, (x + area.offsetX, y + 35 * i + area.offsetY))
+
+
+    def displayMenuOld(screen:pygame.Surface):
+        menu:Menu = MenuApi.currentMenu()
+    
+        match menu.areaCount:
+            case 1:
+                MenuApi.__displayMenuArea(screen, menu, menu.area1, 50, 50)
+            case 2:
+                MenuApi.__displayMenuArea(screen, menu, menu.area1, 50, 50)
+                MenuApi.__displayMenuArea(screen, menu, menu.area2, 550, 50)
+            case 3:
+                MenuApi.__displayMenuArea(screen, menu, menu.area1, 50, 50)
+                MenuApi.__displayMenuArea(screen, menu, menu.area2, 550, 50)
+                MenuApi.__displayMenuArea(screen, menu, menu.area3, 50, 400)
+            case 4:
+                MenuApi.__displayMenuArea(screen, menu, menu.area1, 50, 50)
+                MenuApi.__displayMenuArea(screen, menu, menu.area2, 550, 50)
+                MenuApi.__displayMenuArea(screen, menu, menu.area3, 50, 400)
+                MenuApi.__displayMenuArea(screen, menu, menu.area4, 550, 400)

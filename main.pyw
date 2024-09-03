@@ -40,13 +40,11 @@ while isRunning:
     #else:
         # Receive from server
 
-    MenuApi.update()
-
     Renderer.clearScreen(screen)
     if (Storage.loading):
         Renderer.loadingAnimation(screen)
     else:      #Renderer._areaTest(screen)
-        Renderer.displayMenu(screen)
+        MenuApi.displayMenu(screen)
         Renderer.displayConsole(screen)
 
     pygame.display.update()

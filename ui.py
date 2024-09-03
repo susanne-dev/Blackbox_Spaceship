@@ -6,7 +6,7 @@ import math
 import numpy as np
 
 from storage import Storage
-from menus import MenuApi, Menu, MenuArea
+#from menus import MenuApi, Menu, MenuArea
 from simulation import Simulation
 from gameObject import GameObject, RotationObject
 from utility import Utility
@@ -465,72 +465,6 @@ class Renderer:
             if (Storage.loadingCounter >= 30):
                 Storage.loadingCounter = 0
                 Storage.loading = 0
-        
-    def __displayMenuArea(screen:pygame.Surface, menu:Menu, area:MenuArea, x:int, y:int):
-        font = pygame.font.SysFont('VT323', 30)
-        if (area.type == "list"):
-            for i in range(len(area.content)):
-                #print(area.content)
-                text = font.render(area.content[i], False, (255, 255, 255))
-                screen.blit(text, (x + area.offsetX, y + 35 * i + area.offsetY)) 
-
-
-    def displayMenu(screen:pygame.Surface):
-        menu:Menu = MenuApi.currentMenu()
-        if menu.name == "Piloting":
-            relativeGoal = Utility.mapToRelative(Storage.shipObject.position, Storage.Ship.goal)
-            pitch = np.arctan(relativeGoal[1] / relativeGoal[2])
-            yaw = np.arctan(relativeGoal[0] / relativeGoal[2])
-            if relativeGoal[2] < 0:
-                Renderer.displayGoalDirectionIndicator(screen, (200, 200), 100, 10, pitch, -yaw, True)
-            else:
-                Renderer.displayGoalDirectionIndicator(screen, (200, 200), 100, 10, -pitch, yaw)
-
-        elif menu.name == "Systems":
-            Renderer.displayRadar(screen, (800, 500), 400)
-
-
-        elif menu.name == "FTL":
-            # Minigame
-            pygame.draw.rect(screen, (0,0,0), (75, 75, 500, 500))
-            pygame.draw.rect(screen, (255,255,255), (75, 75, 500, 500), 2)
-
-            #Button
-            font = pygame.font.SysFont('VT323', 30)
-            if (pygame.mouse.get_pos()[0] > 225 and pygame.mouse.get_pos()[0] < 425) and (pygame.mouse.get_pos()[1] > 600 and pygame.mouse.get_pos()[1] < 700): 
-                pygame.draw.rect(screen, (25,0,0), (225, 600, 200, 100))
-                text = font.render("Lock", False, (150, 150, 150))
-                pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
-            else:
-                pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
-                pygame.draw.rect(screen, (50,0,0), (225, 600, 200, 100))
-                text = font.render("Lock", False, (255, 255, 255))
-
-            screen.blit(text, (300, 640))
-
-            pygame.draw.rect(screen, (255,255,255), (225, 600, 200, 100), 2)
-
-            # Map
-            pygame.draw.rect(screen, (0,0,0), (725, 75, 300, 650))
-            pygame.draw.rect(screen, (255,255,255), (725, 75, 300, 650), 2)
-
-        else:    
-            pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
-            match menu.areaCount:
-                case 1:
-                    Renderer.__displayMenuArea(screen, menu, menu.area1, 50, 50)
-                case 2:
-                    Renderer.__displayMenuArea(screen, menu, menu.area1, 50, 50)
-                    Renderer.__displayMenuArea(screen, menu, menu.area2, 550, 50)
-                case 3:
-                    Renderer.__displayMenuArea(screen, menu, menu.area1, 50, 50)
-                    Renderer.__displayMenuArea(screen, menu, menu.area2, 550, 50)
-                    Renderer.__displayMenuArea(screen, menu, menu.area3, 50, 400)
-                case 4:
-                    Renderer.__displayMenuArea(screen, menu, menu.area1, 50, 50)
-                    Renderer.__displayMenuArea(screen, menu, menu.area2, 550, 50)
-                    Renderer.__displayMenuArea(screen, menu, menu.area3, 50, 400)
-                    Renderer.__displayMenuArea(screen, menu, menu.area4, 550, 400)
         
     def _areaTest(screen:pygame.Surface):
 
