@@ -66,7 +66,22 @@ class Renderer:
         if (Storage.cursorFrame >= 10):
             Storage.cursorFrame = 0
 
-    def displayRadar(screen:pygame.Surface, radarCentre = (1350, 150), radius = 200) -> None:
+    def displayGoalDirectionIndicator(sceen:pygame.surface, indicatorCentre, radius1, radius2, pitch = 0, yaw = 0, behind = False):
+        radius3 = radius1 - radius2
+        x = yaw / np.pi * radius3 * 2
+        y = pitch / np.pi * radius3 * 2
+
+        pygame.draw.circle(sceen, (0,0,0), indicatorCentre, radius1)
+        pygame.draw.circle(sceen, (255,255,255), indicatorCentre, radius1, 2)
+        pygame.draw.circle(sceen, (255,255,255), indicatorCentre, radius1, 2)
+
+        if behind:
+            pygame.draw.circle(sceen, (255,255,255), (x + indicatorCentre[0], y + indicatorCentre[1]), radius2, 2)
+        else:
+            pygame.draw.circle(sceen, (255,255,255), (x + indicatorCentre[0], y + indicatorCentre[1]), radius2, 0)
+
+
+    def displayRadar(screen:pygame.Surface, radarCentre = (0, 0), radius = 0) -> None:
         r1 = radius
         r2 = radius * 0.45
         sin = math.sin(30) * r1 / 20
@@ -116,7 +131,7 @@ class Renderer:
 
         pos = object.position.Base
         xz = (radarCentre[0] + pos[0] / 800 * r1, radarCentre[1] - pos[2] / 800 * r2)
-        xyz = (radarCentre[0] + pos[0] / 800 * r1, radarCentre[1] - pos[2] / 800 * r2 - pos[1] / 800 * r2)
+        xyz = (radarCentre[0] + pos[0] / 800 * r1, radarCentre[1] - pos[2] / 800 * r2 - pos[1] / 534 * r2)
         
         #pygame.draw.ellipse(screen, white, (xz[0] - r1 / 20, xz[1] - r2 / 20, r1 / 10, r2 / 10), 1)
 
@@ -462,7 +477,20 @@ class Renderer:
 
     def displayMenu(screen:pygame.Surface):
         menu:Menu = MenuApi.currentMenu()
-        if menu.name == "FTL":
+        if menu.name == "Piloting":
+            relativeGoal = Utility.mapToRelative(Storage.shipObject.position, Storage.Ship.goal)
+            pitch = np.arctan(relativeGoal[1] / relativeGoal[2])
+            yaw = np.arctan(relativeGoal[0] / relativeGoal[2])
+            if relativeGoal[2] < 0:
+                Renderer.displayGoalDirectionIndicator(screen, (200, 200), 100, 10, pitch, -yaw, True)
+            else:
+                Renderer.displayGoalDirectionIndicator(screen, (200, 200), 100, 10, -pitch, yaw)
+
+        elif menu.name == "Systems":
+            Renderer.displayRadar(screen, (800, 500), 400)
+
+
+        elif menu.name == "FTL":
             # Minigame
             pygame.draw.rect(screen, (0,0,0), (75, 75, 500, 500))
             pygame.draw.rect(screen, (255,255,255), (75, 75, 500, 500), 2)
@@ -485,6 +513,7 @@ class Renderer:
             # Map
             pygame.draw.rect(screen, (0,0,0), (725, 75, 300, 650))
             pygame.draw.rect(screen, (255,255,255), (725, 75, 300, 650), 2)
+
         else:    
             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
             match menu.areaCount:

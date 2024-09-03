@@ -58,7 +58,7 @@ class Simulation:
 
         Storage.Ship.goal = [x, y, z]
 
-        #Storage.Ship.goal = [0, -1000, 0]
+        Storage.Ship.goal = [0, 0, 100]
 
     def setShipVelocity(ship: GameObject) -> None:
         relVelocity = Utility.mapToRelative(ship.position, ship.velocity + ship.position.Base)

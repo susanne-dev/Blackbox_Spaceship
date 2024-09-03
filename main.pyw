@@ -48,10 +48,6 @@ while isRunning:
     else:      #Renderer._areaTest(screen)
         Renderer.displayMenu(screen)
         Renderer.displayConsole(screen)
-    if (Storage.activeMenu == "Piloting"):
-        Renderer.displayRadar(screen, (800, 500), 400)
-    else:
-        Renderer.displayRadar(screen)
 
     pygame.display.update()
 

@@ -70,8 +70,9 @@ class MenuApi:
             case "Piloting":
                 relativeGoal = Utility.mapToRelative(Storage.shipObject.position, Storage.Ship.goal)
                 relativeVelocity = Utility.mapToRelative(Storage.shipObject.position, Storage.shipObject.velocity + Storage.shipObject.position.Base)
-                pitch = np.arctan2(relativeGoal[2], np.sqrt(relativeGoal[0]**2 + relativeGoal[1]**2))
-                yaw = np.arctan2(relativeGoal[1], relativeGoal[0])
+                
+                """pitch = np.arctan2(relativeGoal[2], np.sqrt(relativeGoal[0]**2 + relativeGoal[1]**2))
+                yaw = np.arctan2(relativeGoal[1], relativeGoal[0])"""
 
                 menu.area1.content = [
                                         "",
