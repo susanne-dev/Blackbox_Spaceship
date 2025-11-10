@@ -53,6 +53,7 @@ class MenuApi:
         Menu("FTL", 1, MenuArea("draw"))
     ]
 
+    @staticmethod
     def index(name:str) -> int:
         for i in range(len(MenuApi.menus)):
             if (MenuApi.menus[i].name == name):
@@ -60,10 +61,12 @@ class MenuApi:
             
         return -1
     
+    @staticmethod
     def currentMenu() -> Menu:
         return MenuApi.menus[MenuApi.index(Storage.activeMenu)]
 
-    def displayMenu(screen: pygame.surface):
+    @staticmethod
+    def displayMenu(screen: pygame.Surface):
         pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
         menu:Menu = MenuApi.currentMenu()
         
@@ -71,6 +74,7 @@ class MenuApi:
             case "Index":
                 MenuApi.displayMenuOld(screen)
             case "Piloting":
+                Renderer.displayRadar(screen, (600, 500), 400)
                 relativeGoal = Utility.mapToRelative(Storage.shipObject.position, Storage.Ship.goal)
                 relativeVelocity = Utility.mapToRelative(Storage.shipObject.position, Storage.shipObject.velocity + Storage.shipObject.position.Base)
                 pitch = np.arctan(relativeGoal[1] / relativeGoal[2])
@@ -99,7 +103,7 @@ class MenuApi:
             case "Guns":
                 pass
             case "Systems":
-                Renderer.displayRadar(screen, (800, 500), 400)
+                Renderer.displayRadar(screen, (600, 500), 400)
             case "Engineering":
                 pass
             case "Shield":
@@ -130,6 +134,7 @@ class MenuApi:
             case _:
                 pass
 
+    @staticmethod
     def __displayMenuArea(screen:pygame.Surface, menu:Menu, area:MenuArea, x:int, y:int):
         font = pygame.font.SysFont('VT323', 30)
         if (area.type == "list"):
@@ -139,6 +144,7 @@ class MenuApi:
                 screen.blit(text, (x + area.offsetX, y + 35 * i + area.offsetY))
 
 
+    @staticmethod
     def displayMenuOld(screen:pygame.Surface):
         menu:Menu = MenuApi.currentMenu()
     

@@ -14,6 +14,7 @@ from events import EventHandler
 #////////////////////////////
             
 class Simulation:
+    @staticmethod
     def run(tick: int):
 
         Simulation.eventTimers()
@@ -46,6 +47,8 @@ class Simulation:
         Storage.shipObject.position = Simulation.moveObject(Storage.shipObject.position, Storage.shipObject.velocity)
         Simulation.turnShip(Storage.shipObject)
             
+
+    @staticmethod
     def startArea():
         Storage.Simulation.objects.clear()
         # Set goal
@@ -60,6 +63,7 @@ class Simulation:
 
         Storage.Ship.goal = [0, 0, 100]
 
+    @staticmethod
     def setShipVelocity(ship: GameObject) -> None:
         relVelocity = Utility.mapToRelative(ship.position, ship.velocity + ship.position.Base)
 
@@ -88,12 +92,14 @@ class Simulation:
 
         ship.velocity = Utility.mapToGlobal(ship.position, relVelocity) - ship.position.Base
     
+    @staticmethod
     def moveObject(object: RotationObject, velocity) -> RotationObject:
 
         object = object + velocity
 
         return object
     
+    @staticmethod
     def turnShip(ship: GameObject) -> None:
         # Adjust pitch
         if ship.rotation[0] > 0:
@@ -155,6 +161,7 @@ class Simulation:
             ship.position.rotate_around_axis("roll", np.radians(-increment))
             ship.rotation[2] += increment
 
+    @staticmethod
     def eventTimers():
         Storage.Simulation.EventTimers.start()
         currentTime = time.time()
@@ -167,6 +174,7 @@ class Simulation:
                 Simulation.asteroidCluster(clusterCentre, random.randint(5, 20), 400, 300, 0)
                 Simulation.asteroidCluster(clusterCentre, random.randint(1, 3), 300, 0, 0)
 
+    @staticmethod
     def asteroidCluster(pos: Union[np.ndarray, list, tuple], count: int, maxDist: int, minDist: int = 0, maxSpeed: float = 0) -> None:
         for i in range(count):
             generate = True

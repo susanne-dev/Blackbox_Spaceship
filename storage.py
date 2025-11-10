@@ -46,3 +46,24 @@ class Storage:
         mark = [0, 0]
         horizontal = 0 #0 to 100
         vertical = 0 #0 to 100
+
+    class PowerDist:
+        min = 0
+        max = 10
+        available = max
+        values = [0,0,0]
+
+        def add(index: int, action: str):
+            indexes = list(range(0, len(Storage.PowerDist.values)))
+            indexes.remove(index)
+            if action == "+" and Storage.PowerDist.available > Storage.PowerDist.min and Storage.PowerDist.values[index] < Storage.PowerDist.max:
+                Storage.PowerDist.values[index] += 1
+                Storage.PowerDist.available -= 1
+            elif action == "-" and Storage.PowerDist.values[index] > Storage.PowerDist.min:
+                Storage.PowerDist.values[index] -= 1
+                Storage.PowerDist.available += 1
+
+        def balance():
+            partValue = int(Storage.PowerDist.max // len(Storage.PowerDist.values))
+            Storage.PowerDist.values = [partValue] * len(Storage.PowerDist.values)
+            Storage.PowerDist.available -= partValue * len(Storage.PowerDist.values)

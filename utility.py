@@ -5,6 +5,7 @@ from typing import Tuple
 from gameObject import GameObject, RotationObject
 
 class Utility:
+    @staticmethod
     def distance(p1: np.ndarray, p2: np.ndarray) -> float:
         distX = p2[0] - p1[0]
         distY = p2[1] - p1[1]
@@ -12,6 +13,7 @@ class Utility:
 
         return math.sqrt(distX * distX + distY * distY + distZ * distZ)
     
+    @staticmethod
     def angle(p1, p2) -> Tuple[float, float]:
         try:
             dist = Utility.distance(p1, p2)
@@ -28,6 +30,7 @@ class Utility:
             print(f"Unkown error: {e}")
             return 0.0, 0.0
         
+    @staticmethod
     def mapToRelative(rotation_object: RotationObject, pos2: np.ndarray) -> np.ndarray:
         """
         Map a global coordinate (pos2) to a coordinate relative to the RotationObject's local system.
@@ -57,6 +60,7 @@ class Utility:
 
         return np.array([relative_x, relative_y, relative_z])
     
+    @staticmethod
     def mapToGlobal(rotation_object: RotationObject, local_pos: np.ndarray) -> np.ndarray:
         """
         Map a coordinate from the RotationObject's local coordinate system to the global coordinate system.

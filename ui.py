@@ -15,6 +15,7 @@ from utility import Utility
 Coordinate = Union[Tuple[float, float], Sequence[float], Vector2]
 
 class Renderer:
+    @staticmethod
     def clearScreen(screen:pygame.Surface):
         font = pygame.font.SysFont('Consolas', 30)
         #textBackgroundTop = font.render(    "╔══════════════════════════════════════════════════════════════╗", False, (255, 255, 255))
@@ -29,10 +30,10 @@ class Renderer:
             fill1 = "═" * math.floor(fillLen)
             fill2 = "═" * math.ceil(fillLen)
 
-        textBackgroundTop = font.render(    "╔" + fill1 + "╡" + Storage.activeMenu + "╞" + fill2 + "╗", False, (255, 255, 255))
-        textBackgroundMiddle1 = font.render("║                                                              ║", False, (255, 255, 255))
-        textBackgroundMiddle2 = font.render("╠══════════════════════════════════════════════════════════════╣", False, (255, 255, 255))
-        textBackgroundBottom = font.render( "╚══════════════════════════════════════════════════════════════╝", False, (255, 255, 255))
+        textBackgroundTop = font.render(    "╔" + fill1 + "╡" + Storage.activeMenu + "╞" + fill2 + "╦═══════════════════════╗", False, (255, 255, 255))
+        textBackgroundMiddle1 = font.render("║                                                              ║                       ║", False, (255, 255, 255))
+        textBackgroundMiddle2 = font.render("╠══════════════════════════════════════════════════════════════╣                       ║", False, (255, 255, 255))
+        textBackgroundBottom = font.render( "╚══════════════════════════════════════════════════════════════╩═══════════════════════╝", False, (255, 255, 255))
 
         background = pygame.Surface((1600, 900))
         background.fill(pygame.Color('#050041'))
@@ -49,6 +50,7 @@ class Renderer:
             
         screen.blit(textBackgroundBottom, (5, 870))
 
+    @staticmethod
     def displayConsole(screen:pygame.Surface):
         font = pygame.font.SysFont('VT323', 30)
 
@@ -66,6 +68,7 @@ class Renderer:
         if (Storage.cursorFrame >= 10):
             Storage.cursorFrame = 0
 
+    @staticmethod
     def displayGoalDirectionIndicator(sceen:pygame.surface, indicatorCentre, radius1, radius2, pitch = 0, yaw = 0, behind = False):
         radius3 = radius1 - radius2
         x = yaw / np.pi * radius3 * 2
@@ -81,6 +84,7 @@ class Renderer:
             pygame.draw.circle(sceen, (255,255,255), (x + indicatorCentre[0], y + indicatorCentre[1]), radius2, 0)
 
 
+    @staticmethod
     def displayRadar(screen:pygame.Surface, radarCentre = (0, 0), radius = 0) -> None:
         r1 = radius
         r2 = radius * 0.45
@@ -115,6 +119,7 @@ class Renderer:
         #pygame.draw.line(screen, (255, 255, 255), (radarCentre[0] - r1, radarCentre[1]), (radarCentre[0] + r1, radarCentre[1]))
         #pygame.draw.line(screen, (255, 255, 255), (radarCentre[0], radarCentre[1] - r2), (radarCentre[0], radarCentre[1] + r2))
 
+    @staticmethod
     def displayRadarObject1(screen:pygame.Surface, radarCentre: tuple[int, int], r1: int, r2: int, object: GameObject, dist: int) -> None:
         colourMult = 1 - (dist / 800)
         if object.team == -1:
@@ -142,6 +147,7 @@ class Renderer:
             pygame.draw.line(screen, colour, xz, xyz, 4)
             pygame.draw.circle(screen, colour, xyz, int(r1 / 20))
 
+    @staticmethod
     def displayRadarObject2(screen:pygame.Surface, radarCentre: tuple[int, int], r1: int, r2: int, object: GameObject, dist: int) -> None:
         colourMult = 1 - (dist / 800)
         if object.team == -1:
@@ -163,6 +169,7 @@ class Renderer:
             pygame.draw.ellipse(screen, colour, (xz[0] - r1 / 20, xz[1] - r2 / 20, r1 / 10, r2 / 10))
             pygame.draw.ellipse(screen, colour, (xz[0] - r1 / 10, xz[1] - r2 / 10, r1 / 5, r2 / 5), 3)
 
+    @staticmethod
     def startLoadingAnimation():
         if (random.randint(0, 19) == 0):
             Storage.loading = 5
@@ -175,6 +182,7 @@ class Renderer:
         else:
             Storage.loading = 1
 
+    @staticmethod
     def loadingAnimation(screen:pygame.Surface):
         font = pygame.font.SysFont('Consolas', 30)
         if (Storage.loading == 1):
@@ -466,6 +474,7 @@ class Renderer:
                 Storage.loadingCounter = 0
                 Storage.loading = 0
         
+    @staticmethod
     def _areaTest(screen:pygame.Surface):
 
         background1 = pygame.Surface((500, 350))
